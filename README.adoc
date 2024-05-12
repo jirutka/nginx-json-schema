@@ -1,0 +1,90 @@
+= NGINX JSON Schema
+:proj-name: nginx-json-schema
+:gh-name: jirutka/{proj-name}
+
+TBD
+
+https://jirutka.github.io/{proj-name}/nginx-full.json
+
+
+== Tools
+
+* https://github.com/jirutka/nginx-jsconf[nginx-jsconf] - JS library and a CLI tool to convert nginx configuration from YAML or JSON to nginx config format
+
+
+== Examples
+
+Directive without a value::
++
+[source, nginx]
+ip_hash;
++
+[source, yaml]
+ip_hash: null
+
+Repeated directive::
++
+[source, nginx]
+allow 127.0.0.1;
+allow ::1;
++
+[source, yaml]
+allow:
+  - 127.0.0.1
+  - ::1
+
+Block directive without a parameter::
++
+[source, nginx]
+----
+events {
+    worker_connections 4096;
+}
+----
++
+[source, yaml]
+events:
+  worker_connections: 4096
+
+Block directive with a parameter::
++
+[source, nginx]
+----
+location ~ ^/api/v[0-9]+/ {
+    index on;
+}
+location / {
+    index on;
+}
+----
++
+[source, yaml]
+location:
+  '~ ^/api/v[0-9]+/':
+    index: on
+  /:
+    index: on
+
+Repeated directive in object notation::
++
+[source, nginx]
+proxy_set_header Host $http_host;
+proxy_set_header Forwarded $proxy_add_forwarded;
++
+[source, yaml]
+proxy_set_header:
+  Host: $http_host
+  Forwarded: $proxy_add_forwarded
+
+Single directive with a scalar value::
++
+[source, nginx]
+proxy_buffering off
++
+[source, yaml]
+proxy_buffering: false
+
+
+== License
+
+This project is licensed under https://opensource.org/license/mit/[MIT License].

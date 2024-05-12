@@ -1,0 +1,5 @@
+#!/bin/sh
+
+PROJECT_DIR="$(dirname "$0")/.."
+# https://github.com/TypeStrong/ts-node/issues/1007
+exec node --import "data:text/javascript,import {register} from 'node:module'; import {pathToFileURL} from 'node:url'; register('ts-node/esm', pathToFileURL('./'))" $PROJECT_DIR/src/main.ts "$@"

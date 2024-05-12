@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "stylecheck": "prettier --check src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@xmldom/xmldom": "^0.8.10",
+    "fast-xml-parser": "^4.3.6",
+    "mdast-builder": "^1.1.1",
+    "mdast-util-to-markdown": "^2.1.0",
+    "rambda": "^9.2.0",
+    "type-flag": "^3.0.0",
+    "xpath": "^0.0.34"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "json-schema-typed": "^8.0.1",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

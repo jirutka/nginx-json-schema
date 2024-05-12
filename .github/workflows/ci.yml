@@ -1,0 +1,91 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run stylecheck
+
+  generate:
+    runs-on: ubuntu-latest
+    env:
+      DOCS_GLOB: xml/en/docs/ngx_core_module.xml xml/en/docs/*/ngx_*module.xml
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          path: nginx.org
+          repository: nginx/nginx.org
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Generate schema comment
+        working-directory: nginx.org
+        run: |
+          commit="$(git log -1 --format=%h:%cd --date=format:%Y-%m-%d -- ${{ env.DOCS_GLOB }})" # <sha>:<date>
+
+          comment="Schema of NGINX configuration generated from \
+          https://github.com/nginx/nginx.org/tree/${commit%:*} (${commit#*:}) \
+          by https://github.com/$GITHUB_REPOSITORY."
+
+          echo "SCHEMA_COMMENT=$comment" | tee -a "$GITHUB_ENV"
+
+      - name: Generate schema
+        working-directory: nginx.org
+        run: |
+          mkdir -p ../schema
+          ../bin/generate-schema --comment "$SCHEMA_COMMENT" --out ../schema/nginx-full.json -- ${{ env.DOCS_GLOB }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: schema
+          path: schema/*
+
+  publish:
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    needs:
+      - generate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - run: cp schema/*.json gh-pages/
+
+      - name: Check if there are any changes
+        id: has_changes
+        working-directory: gh-pages
+        run: |
+          git status || exit 1
+          test -n "$(git status --porcelain)" && result=yes || result=no
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+
+      - name: Commit changes
+        if: steps.has_changes.outputs.result == 'yes'
+        working-directory: gh-pages
+        run: |
+          git config --local user.email "github-actions@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add --all
+          git commit -m "Built from ${{ github.sha }}"
+
+      - name: Push changes back to origin
+        if: steps.has_changes.outputs.result == 'yes'
+        working-directory: gh-pages
+        run: |
+          # XXX: workaround for https://github.com/orgs/community/discussions/55820
+          git config --global http.version HTTP/1.1
+          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
