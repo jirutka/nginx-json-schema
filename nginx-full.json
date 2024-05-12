@@ -12716,13 +12716,29 @@
       "anyOf": [
         {
           "title": "length",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]+[kKmMgG]?$"
+            },
+            {
+              "type": "number"
+            }
+          ]
         },
         {
           "type": "array",
           "items": {
             "title": "length",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]+[kKmMgG]?$"
+              },
+              {
+                "type": "number"
+              }
+            ]
           }
         }
       ],
@@ -19115,13 +19131,29 @@
       "anyOf": [
         {
           "title": "length",
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9]+[kKmMgG]?$"
+            },
+            {
+              "type": "number"
+            }
+          ]
         },
         {
           "type": "array",
           "items": {
             "title": "length",
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9]+[kKmMgG]?$"
+              },
+              {
+                "type": "number"
+              }
+            ]
           }
         }
       ],
