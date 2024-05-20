@@ -9,7 +9,8 @@ https://jirutka.github.io/{proj-name}/nginx-full.json
 
 == Tools
 
-* https://github.com/jirutka/nginx-jsconf[nginx-jsconf] - JS library and a CLI tool to convert nginx configuration from YAML or JSON to nginx config format
+* https://github.com/jirutka/nginx-jsconf[nginx-jsconf] – JS library and a CLI tool to convert nginx configuration from YAML or JSON to nginx config format
+* link:scripts/nginx-json-schema-filter.mjs[nginx-json-schema-filter] – Script to remove selected nginx modules from nginx-full.json
 
 
 == Examples
