@@ -29,6 +29,8 @@ Options:
                             keep in the schema. If not provided, all modules are
                             included.
 
+     --id <id>              Change $id of the schema to <id>.
+
   -h --help                 Show this message and exit.
 
 Module groups:
@@ -254,6 +256,7 @@ function parseArgs(argv) {
   const include = new Set()
   const exclude = new Set()
   let action = 'filter'
+  let id
 
   loop: while (argv.length > 0) {
     switch (argv[0]) {
@@ -271,6 +274,11 @@ function parseArgs(argv) {
         for (const name of arg.split(',')) {
           include.add(name)
         }
+        break
+      }
+      case '--id': {
+        argv.shift()
+        id = argv.shift()
         break
       }
       case '--exclude':
@@ -301,12 +309,12 @@ function parseArgs(argv) {
     }
   }
 
-  return { args: argv, action, include, exclude }
+  return { args: argv, action, id, include, exclude }
 }
 
 /** @param {string[]} argv */
 function main(argv) {
-  const { action, exclude, include } = parseArgs(argv)
+  const { action, exclude, id, include } = parseArgs(argv)
   const rootSchema = readJsonSchema(argv[0])
 
   if (include.size === 0) {
@@ -322,7 +330,8 @@ function main(argv) {
       break
     }
     default: {
-      const output = JSON.stringify(filterSchema(rootSchema, modules), null, 2)
+      const schema = filterSchema(rootSchema, modules)
+      const output = JSON.stringify({ ...schema, $id: id }, null, 2)
       console.log(output)
     }
   }
