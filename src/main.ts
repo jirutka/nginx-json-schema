@@ -39,6 +39,10 @@ function main(argv: string[]): void {
       type: String,
       alias: 'c',
     },
+    id: {
+      type: String,
+      alias: 'i',
+    },
     out: {
       type: String,
       alias: 'o',
@@ -50,7 +54,7 @@ function main(argv: string[]): void {
   }, argv)
 
   if (flags.help) {
-    console.log(`Usage: generate-schema [-c <comment>] [-o <file>] <module.xml>...`)
+    console.log(`Usage: generate-schema [-c <comment>] [-i <id>] [-o <file>] <module.xml>...`)
     process.exit(0)
   }
 
@@ -73,12 +77,16 @@ function main(argv: string[]): void {
     return []
   })
 
-  const schema = JSON.stringify(generateJsonSchema(directives, flags.comment || ''), null, 2)
+  const schema = generateJsonSchema(directives, {
+    $comment: flags.comment || '',
+    $id: flags.id,
+  })
+  const output = JSON.stringify(schema, null, 2)
 
   if (flags.out) {
-    FS.writeFileSync(flags.out, schema, 'utf-8')
+    FS.writeFileSync(flags.out, output, 'utf-8')
   } else {
-    console.log(schema)
+    console.log(output)
   }
 }
 

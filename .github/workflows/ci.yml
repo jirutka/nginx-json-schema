@@ -3,6 +3,9 @@ on:
   - push
   - pull_request
 
+env:
+  GH_PAGES_URL: https://jirutka.github.io/nginx-json-schema
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -42,7 +45,11 @@ jobs:
         working-directory: nginx.org
         run: |
           mkdir -p ../schema
-          ../bin/generate-schema --comment "$SCHEMA_COMMENT" --out ../schema/nginx-full.json -- ${{ env.DOCS_GLOB }}
+          ../bin/generate-schema \
+              --id ${{ env.GH_PAGES_URL }}/nginx-full.json \
+              --comment "$SCHEMA_COMMENT" \
+              --out ../schema/nginx-full.json \
+              -- ${{ env.DOCS_GLOB }}
 
       - uses: actions/upload-artifact@v4
         with:

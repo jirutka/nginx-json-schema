@@ -73,7 +73,10 @@ function contextRefId(dir: DirectiveInfo): string {
   return `context:${id}`
 }
 
-export function generateJsonSchema(directives: DirectiveInfo[], comment: string): JSONSchema {
+export function generateJsonSchema(
+  directives: DirectiveInfo[],
+  meta: JSONSchema = {},
+): JSONSchema {
   const mainSchema = generateContextSchema(filterDirectivesByContext('main', 'main', directives))
   const contextSchemas = sortObjProps(generateContextSchemas(directives))
 
@@ -96,7 +99,7 @@ export function generateJsonSchema(directives: DirectiveInfo[], comment: string)
 
   return {
     $schema: SCHEMA,
-    $comment: comment,
+    ...meta,
     ...mainSchema,
     $defs: {
       ...contextSchemas,
