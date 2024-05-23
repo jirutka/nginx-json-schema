@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$comment": "Schema of NGINX configuration generated from https://github.com/nginx/nginx.org/tree/a6722a8 (2024-05-16) by https://github.com/jirutka/nginx-json-schema.",
+  "$comment": "Schema of NGINX configuration generated from https://github.com/nginx/nginx.org/tree/fa11d96 (2024-05-23) by https://github.com/jirutka/nginx-json-schema.",
+  "$id": "https://jirutka.github.io/nginx-json-schema/nginx-full.json",
   "type": "object",
   "properties": {
     "daemon": {
