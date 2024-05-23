@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$comment": "Schema of NGINX configuration generated from https://github.com/nginx/nginx.org/tree/18e01d9 (2024-05-09) by https://github.com/jirutka/nginx-json-schema.",
+  "$comment": "Schema of NGINX configuration generated from https://github.com/nginx/nginx.org/tree/a6722a8 (2024-05-16) by https://github.com/jirutka/nginx-json-schema.",
   "type": "object",
   "properties": {
     "daemon": {
@@ -7197,37 +7197,19 @@
     "http_auth_jwt:auth_jwt_type": {
       "anyOf": [
         {
-          "anyOf": [
-            {
-              "title": "signed",
-              "type": "string"
-            },
-            {
-              "title": "encrypted",
-              "type": "string"
-            },
-            {
-              "title": "nested",
-              "type": "string"
-            }
+          "enum": [
+            "signed",
+            "encrypted",
+            "nested"
           ]
         },
         {
           "type": "array",
           "items": {
-            "anyOf": [
-              {
-                "title": "signed",
-                "type": "string"
-              },
-              {
-                "title": "encrypted",
-                "type": "string"
-              },
-              {
-                "title": "nested",
-                "type": "string"
-              }
+            "enum": [
+              "signed",
+              "encrypted",
+              "nested"
             ]
           }
         }
